@@ -14,12 +14,16 @@
 - (IBAction)openAlert:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *bookmarks;
+@property (nonatomic) UIDeviceOrientation currentOrientation ;
 @end
 
 @implementation OneViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object: nil];
     
 }
 
@@ -71,6 +75,16 @@
 
 - (void)presentationControllerDidDismiss:(UIPopoverPresentationController *)popoverPresentationController {
     NSLog(@"Popover Dismissed!");
+}
+
+- (void)deviceOrientationDidChange:(NSNotification *)notification {
+    
+    _currentOrientation = [[UIDevice currentDevice] orientation];
+    if (UIDeviceOrientationIsLandscape(_currentOrientation)) {
+        NSLog(@"deviceOrientationDidChange Landscape");
+    } else {
+        NSLog(@"deviceOrientationDidChange Portrait");
+    }
 }
 
 @end
